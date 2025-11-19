@@ -43,6 +43,9 @@ class ApplePayModule: NSObject, PKPaymentAuthorizationViewControllerDelegate {
         let merchantIdentifier = paymentDetails["merchantIdentifier"] as? String ?? ""
         let countryCode = paymentDetails["countryCode"] as? String ?? "US"
         let currencyCode = paymentDetails["currencyCode"] as? String ?? "USD"
+
+        //  NEW: Extract the label from JS, or default to "Total" if missing
+        let paymentLabel = paymentDetails["label"] as? String ?? "Total"
         
         let supportedNetworksRaw = (paymentDetails["supportedNetworks"] as? [String]) ?? []
         
@@ -71,6 +74,11 @@ class ApplePayModule: NSObject, PKPaymentAuthorizationViewControllerDelegate {
             rejecter("MISSING_TRANSACTION_DETAILS", "Transaction details missing", nil)
             return
         }
+        
+        //  UPDATED: Use the dynamic variable 'paymentLabel' instead of hardcoded "Total"
+        paymentRequest.paymentSummaryItems = [
+            PKPaymentSummaryItem(label: paymentLabel, amount: amount)
+        ]
         
         // Set Payment Total
         paymentRequest.paymentSummaryItems = [
