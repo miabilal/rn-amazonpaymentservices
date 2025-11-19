@@ -76,14 +76,12 @@ class ApplePayModule: NSObject, PKPaymentAuthorizationViewControllerDelegate {
         }
         
         //  UPDATED: Use the dynamic variable 'paymentLabel' instead of hardcoded "Total"
+        // Set Payment Total
         paymentRequest.paymentSummaryItems = [
             PKPaymentSummaryItem(label: paymentLabel, amount: amount)
         ]
         
-        // Set Payment Total
-        paymentRequest.paymentSummaryItems = [
-            PKPaymentSummaryItem(label: "Total", amount: amount)
-        ]
+       
 
         if !PKPaymentAuthorizationViewController.canMakePayments(usingNetworks: paymentRequest.supportedNetworks) {
             rejecter("APPLE_PAY_UNAVAILABLE", "Apple Pay not supported with the provided networks", nil)
